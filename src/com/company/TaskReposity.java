@@ -1,6 +1,8 @@
 package com.company;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -59,6 +61,7 @@ public class TaskReposity {
                 task.setContent(rs.getString("content"));
                 task.setTaskStatus(TaskStatus.valueOf(rs.getString("task_status")));
                 task.setCreated_date(rs.getString("created_date"));
+                task.setFinished_date(LocalDateTime.parse(rs.getString("finished_date")));
                 taskLinkedList.add(task);
             }
             con.close();
@@ -83,7 +86,7 @@ public class TaskReposity {
         for (Task task:list) {
             if (task.getTaskStatus() == DONE) {
                 System.out.println(task.getId() + " " + task.getTitle() + " " + task.getContent() + " " + task.getTaskStatus() + " "
-                        + task.getCreated_date() + " ");
+                        + task.getCreated_date() + " "+task.getFinished_date());
             }
         }
     }
@@ -142,12 +145,15 @@ public class TaskReposity {
         System.out.println("Enter id");
         int id=scanner.nextInt();
         String taskstatus="DONE";
+        Task task=new Task();
         try {
             Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jdbc_db",
                     "jdbc_user", "123456");
             Statement statement=con.createStatement();
-            String sql="update Task set task_status='%s' where id=%d";
-            sql=String.format(sql ,taskstatus,id);
+            task.setFinished_date(LocalDateTime.now());
+            System.out.println(task.getFinished_date());
+            String sql="update Task set task_status='%s' ,finished_date='%s' where id=%d";
+            sql=String.format(sql ,taskstatus,task.getFinished_date(),id);
             int effectiveRows=statement.executeUpdate(sql);
 
             con.close();
@@ -156,5 +162,6 @@ public class TaskReposity {
         }
 
     }
+
 
 }

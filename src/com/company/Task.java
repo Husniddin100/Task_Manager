@@ -8,13 +8,15 @@ public class Task {
     private String content;
     private TaskStatus taskStatus;
     private String created_date;
+    private LocalDateTime finished_date;
 
-    public Task(int id, String title, String content, TaskStatus taskStatus, String created_date) {
+    public Task(int id, String title, String content, TaskStatus taskStatus, String created_date, LocalDateTime finished_date) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.taskStatus = taskStatus;
         this.created_date = created_date;
+        this.finished_date = finished_date;
     }
 
     public Task() {
@@ -60,6 +62,13 @@ public class Task {
         this.created_date = created_date;
     }
 
+    public LocalDateTime getFinished_date() {
+        return finished_date;
+    }
+
+    public void setFinished_date(LocalDateTime finished_date) {
+        this.finished_date = finished_date;
+    }
 
     @Override
     public String toString() {
@@ -69,6 +78,8 @@ public class Task {
                 ", content='" + content + '\'' +
                 ", taskStatus=" + taskStatus +
                 ", created_date='" + created_date + '\'' +
+                ", finished_date=" + finished_date +
                 '}';
     }
 }
+
