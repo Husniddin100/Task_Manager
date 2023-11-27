@@ -28,13 +28,15 @@ public class TaskReposity {
         task1.setContent(content);
         task1.setTaskStatus(ACTIVE);
         task1.setCreated_date(createdDate);
+        task1.setFinished_date(LocalDateTime.now());
+
         try {
             Connection connection= DriverManager.getConnection("jdbc:postgresql://localhost:5432/jdbc_db",
-            "jdbc_user", "123456");
+                    "jdbc_user", "123456");
             Statement statement=connection.createStatement();
-            String sql="insert into Task (id,title,content,task_status,created_date)" +
+            String sql="insert into Task (id,title,content,task_status,created_date,finished_date)" +
                     "values("+task1.getId()+",'"+task1.getTitle()+"','"+task1.getContent()+"','"+task1.getTaskStatus()+"'," +
-                    "'"+task1.getCreated_date()+"')";
+                    "'"+task1.getCreated_date()+"','"+task1.getFinished_date()+"')";
             int effectiveRows=statement.executeUpdate(sql);
             if (effectiveRows!=0){
                 System.out.println("Create Task succesfully");
@@ -74,7 +76,7 @@ public class TaskReposity {
     public void tasklist(){
         LinkedList<Task>list=ActiveTaskList();
         for (Task task:list) {
-            if (task.getTaskStatus() == ACTIVE) {
+            if (task!=null && task.getTaskStatus() == ACTIVE) {
                 System.out.println(task.getId() + " " + task.getTitle() + " " + task.getContent() + " " + task.getTaskStatus() + " "
                         + task.getCreated_date() + " ");
             }
@@ -84,7 +86,7 @@ public class TaskReposity {
     public void FinishedTaskList(){
         LinkedList<Task>list=ActiveTaskList();
         for (Task task:list) {
-            if (task.getTaskStatus() == DONE) {
+            if (task!=null && task.getTaskStatus() == DONE) {
                 System.out.println(task.getId() + " " + task.getTitle() + " " + task.getContent() + " " + task.getTaskStatus() + " "
                         + task.getCreated_date() + " "+task.getFinished_date());
             }
@@ -99,7 +101,6 @@ public class TaskReposity {
         String title=scanner1.nextLine();
         System.out.println("Enter content");
         String content=scanner1.nextLine();
-
         try {
             Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jdbc_db",
                     "jdbc_user", "123456");
@@ -151,11 +152,9 @@ public class TaskReposity {
                     "jdbc_user", "123456");
             Statement statement=con.createStatement();
             task.setFinished_date(LocalDateTime.now());
-            System.out.println(task.getFinished_date());
             String sql="update Task set task_status='%s' ,finished_date='%s' where id=%d";
             sql=String.format(sql ,taskstatus,task.getFinished_date(),id);
             int effectiveRows=statement.executeUpdate(sql);
-
             con.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
