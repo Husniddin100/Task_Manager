@@ -27,11 +27,11 @@ public class Menu {
                     break;
                 case 3:taskReposity.FinishedTaskList();
                     break;
-                case 4:
+                case 4:taskReposity.UpdateTask();
                     break;
-                case 5:
+                case 5:taskReposity.DeleteTask();
                     break;
-                case 6:
+                case 6:taskReposity.Mark_isDone();
                     break;
                 case 7:t=false;
                     break;

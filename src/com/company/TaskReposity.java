@@ -34,6 +34,11 @@ public class TaskReposity {
                     "values("+task1.getId()+",'"+task1.getTitle()+"','"+task1.getContent()+"','"+task1.getTaskStatus()+"'," +
                     "'"+task1.getCreated_date()+"')";
             int effectiveRows=statement.executeUpdate(sql);
+            if (effectiveRows!=0){
+                System.out.println("Create Task succesfully");
+            }else {
+                System.err.println("Create Task Error");
+            }
             connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -82,4 +87,74 @@ public class TaskReposity {
             }
         }
     }
+    public void UpdateTask(){
+        Scanner scanner=new Scanner(System.in);
+        Scanner scanner1=new Scanner(System.in);
+        System.out.println("Enter task id");
+        int taskId=scanner.nextInt();
+        System.out.println("Enter title ");
+        String title=scanner1.nextLine();
+        System.out.println("Enter content");
+        String content=scanner1.nextLine();
+
+        try {
+            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jdbc_db",
+                    "jdbc_user", "123456");
+            Statement statement=con.createStatement();
+            String sql="update Task set title='%s',content='%s' where id=%d";
+            sql=String.format(sql,title,content,taskId);
+            int effectiveRows=statement.executeUpdate(sql);
+            if (effectiveRows!=0){
+                System.out.println("Update Task succesfully");
+            }else {
+                System.err.println("Update Task Error");
+            }
+            con.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void DeleteTask(){
+        Scanner scanner=new Scanner(System.in);
+        System.out.println("Enter id");
+        int id=scanner.nextInt();
+        try {
+            Connection con=DriverManager.getConnection("jdbc:postgresql://localhost:5432/jdbc_db",
+                    "jdbc_user", "123456");
+            Statement statement=con.createStatement();
+            String sql="delete from Task where id="+id;
+            int effectiveRows=statement.executeUpdate(sql);
+            if (effectiveRows!=0){
+                System.out.println("Delete Task succesfully");
+            }else {
+                System.err.println("Delete Task Error");
+            }
+            con.close();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void Mark_isDone(){
+        Scanner scanner=new Scanner(System.in);
+        System.out.println("Enter id");
+        int id=scanner.nextInt();
+        String taskstatus="DONE";
+        try {
+            Connection con = DriverManager.getConnection("jdbc:postgresql://localhost:5432/jdbc_db",
+                    "jdbc_user", "123456");
+            Statement statement=con.createStatement();
+            String sql="update Task set task_status='%s' where id=%d";
+            sql=String.format(sql ,taskstatus,id);
+            int effectiveRows=statement.executeUpdate(sql);
+
+            con.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
 }
